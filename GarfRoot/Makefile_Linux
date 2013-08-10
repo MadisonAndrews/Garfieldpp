@@ -1,0 +1,28 @@
+OBJDIR  = $(GARFIELD_HOME)/Object
+SRCDIR  = $(GARFIELD_HOME)/Source
+INCDIR  = $(GARFIELD_HOME)/Include
+HEEDDIR = $(GARFIELD_HOME)/Heed
+LIBDIR  = $(GARFIELD_HOME)/Library
+
+# Compiler (and Linker)
+CXX = `root-config --cxx`
+
+# Compiler (and Linker) flags
+CXXFLAGS  = `root-config --cflags`
+CXXFLAGS += -I$(INCDIR) -I$(HEEDDIR)
+# Code Generation and Optimization flags
+CXXFLAGS += -fno-common -fPIC -O3
+# Warning flags
+CXXFLAGS += -W -Wall -Wextra -Wno-long-long
+# Debug flags
+CXXFLAGS += -g
+
+# Libraries (note: the order matters)
+LDLIBS  = -L$(LIBDIR) -Wl,--whole-archive -lGarfield -Wl,--no-whole-archive
+# Fortran libraries
+LDLIBS += -lgfortran
+# ROOT libraries
+LDLIBS += `root-config --evelibs`
+
+garfroot: garfroot.C
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS)
