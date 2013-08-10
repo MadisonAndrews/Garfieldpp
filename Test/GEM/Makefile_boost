@@ -1,0 +1,63 @@
+SHELL = /bin/sh
+UNAME = $(shell uname)
+
+# Root variables
+ROOTCFLAGS = -L$(ROOTSYS)/lib $(shell $(ROOTSYS)/bin/root-config --cflags)
+ROOTLIBS   = -L$(ROOTSYS)/lib $(shell $(ROOTSYS)/bin/root-config --libs) 
+ROOTGLIBS  = -L$(ROOTSYS)/lib $(shell $(ROOTSYS)/bin/root-config --glibs)
+
+# Compiler
+CXX = gcc
+
+OBJDIR  = $(GARFIELD_HOME)/Object
+SRCDIR  = $(GARFIELD_HOME)/Source
+INCDIR  = $(GARFIELD_HOME)/Include
+HEEDDIR = $(GARFIELD_HOME)/Heed
+LIBDIR  = $(GARFIELD_HOME)/Library
+
+# Compiler flags
+CFLAGS  = -Wall                         #This enables all the warnings about constructions
+CFLAGS += -Wextra                       #Print extra warnings
+CFLAGS += $(ROOTCFLAGS)
+CFLAGS += -O2 				#Perform optimization
+CFLAGS += -c                            #Generate object file
+CFLAGS += -I$(INCDIR) 
+CFLAGS += -I$(HEEDDIR)
+CFLAGS += -I/usr/include/python2.7/ 
+CFLAGS += -I/usr/include/boost141/ 
+CFLAGS += -g                            #Debug flag
+#CFLAGS += -fno-common -c
+#CFLAGS += -Wno-long-long
+
+LDFLAGS  = $(ROOTGLIBS)
+LDFLAGS += -lGeom 
+LDFLAGS += -lgfortran
+LDFLAGS += -lm
+LDFLAGS += -lboost_regex
+LDFLAGS += -lpython2.7
+LDFLAGS += -lboost_python
+LDFLAGS += -L$(LIBDIR) 
+LDFLAGS += -lGarfield
+#LDFLAGS += -g
+
+gem: gem.C 
+	$(CXX) $(CFLAGS) gem.C
+	$(CXX) -o gem gem.o $(LDFLAGS)
+
+clean:
+	rm gem gem.o
+
+#SOURCES = gem.C #edep.C
+#OBJECTS=$(SOURCES:.C=.o)
+#PROG = gem
+
+#all: $(PROG)
+
+#%.o : %.cc
+#	$(CXX) -c $< $(CFLAGS) 
+
+#$(PROG): $(OBJECTS) 
+#	$(CXX) -o $@ $(LDFLAGS)
+
+#clean:
+#	rm -f *.o $(PROG)
