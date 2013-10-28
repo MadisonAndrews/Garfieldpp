@@ -61,7 +61,7 @@ installdirs :
 	@if [ ! -d $(OBJDIR)/Heed/ ]; then mkdir -p $(OBJDIR)/Heed; \
 	    echo "   >>>> Create $(OBJDIR)/Heed"; \
         else echo " $(OBJDIR)/Heed already exists"; fi
-        
+
 heed:	
 	@echo Compiling Heed...
 	@cd $(HEEDDIR); make; cd $(GARFIELD_HOME)
